@@ -13,7 +13,7 @@ if st.button("Submit"):
         st.write("Processing...")
 
         try:
-            result = root_agent.chat(user_input)
+            result = root_agent(user_input)   # ✅ Correct way
 
             st.success("Response:")
             st.write(result)
