@@ -1,12 +1,11 @@
 import streamlit as st
 import google.generativeai as genai
-import os
 
 # Configure API Key
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
-# Load Gemini model
-model = genai.GenerativeModel("gemini-1.5-flash")
+# Load Gemini model (Stable)
+model = genai.GenerativeModel("gemini-pro")
 
 st.set_page_config(page_title="AI Home Renovation", layout="wide")
 
@@ -21,6 +20,7 @@ if st.button("Submit"):
 
         try:
             response = model.generate_content(user_input)
+
             st.success("Response:")
             st.write(response.text)
 
