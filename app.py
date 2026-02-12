@@ -12,7 +12,8 @@ user_input = st.text_input("Enter your question:")
 if st.button("Submit"):
     if user_input:
         st.write("Processing...")
-        response = root_agent.run(user_input)
+        response = root_agent.invoke(user_input)
+        
         st.success("Response:")
         st.write(response)
     else:
