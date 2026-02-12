@@ -13,10 +13,10 @@ if st.button("Submit"):
         st.write("Processing...")
 
         try:
-            result = root_agent.invoke({"input": user_input})
+            result = root_agent.chat(user_input)
 
             st.success("Response:")
-            st.write(result["output"])
+            st.write(result)
 
         except Exception as e:
             st.error("Error occurred:")
