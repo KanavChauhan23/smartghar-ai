@@ -455,7 +455,7 @@ Make this plan INSPIRING, PRACTICAL, and ACHIEVABLE. Use Indian context, brands,
                 st.warning("""
 **⚠️ Important**
 - Keep 10-15% buffer for unexpected costs
-- Take clear before and after photos to track progress and compare the transformation.
+- Take clear before and after photos to track progress.
                 """)
             
         except Exception as e:
