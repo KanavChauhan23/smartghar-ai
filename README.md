@@ -9,7 +9,7 @@
 
 **AI-Powered Home Renovation Planning for Indian Homes**
 
-[Live Demo](https://home-renovator.streamlit.app/) • [Report Bug](https://github.com/KanavChauhan23/smartghar-ai/issues) • [Request Feature](https://github.com/KanavChauhan23/smartghar-ai/issues)
+[Live Demo](https://smartghar-ai.streamlit.app/) • [Report Bug](https://github.com/KanavChauhan23/smartghar-ai/issues) • [Request Feature](https://github.com/KanavChauhan23/smartghar-ai/issues)
 
 *आपके सपनों का घर, AI की मदद से | Your Dream Home, Powered by AI*
 
@@ -67,7 +67,7 @@
 
 ## 🚀 Live Demo
 
-**Try it now:** [https://home-renovator.streamlit.app/](https://home-renovator.streamlit.app/)
+**Try it now:** [https://smartghar-ai.streamlit.app/](https://smartghar-ai.streamlit.app/)
 
 ### Sample Input
 ```
