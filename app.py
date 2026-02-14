@@ -1,243 +1,330 @@
 import streamlit as st
 from groq import Groq
 
-# ==============================
-# Initialize Groq Client
-# ==============================
+# ===============================
+# Initialize AI Client
+# ===============================
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
-# ==============================
+# ===============================
 # Page Config
-# ==============================
+# ===============================
 st.set_page_config(
-    page_title="RoomGenie - AI Renovation Planner",
+    page_title="SmartGhar AI - Renovation Planner",
     layout="wide",
-    page_icon="🧞‍♂️"
+    page_icon="🏠"
 )
 
-# ==============================
-# Custom CSS
-# ==============================
+# ===============================
+# Custom CSS (Professional UI)
+# ===============================
 st.markdown("""
 <style>
-.main-header {
-    font-size: 3.2rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+
+body {
+    background-color: #fafafa;
+}
+
+.main-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #4F46E5;
     text-align: center;
 }
 
-.sub-header {
+.sub-title {
     text-align: center;
-    color: #666;
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.input-box textarea {
+    border-radius: 12px !important;
+    font-size: 16px !important;
 }
 
 .stButton>button {
     width: 100%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg,#4F46E5,#7C3AED);
     color: white;
-    font-size: 1.1rem;
+    font-size: 18px;
     font-weight: 600;
-    padding: 0.8rem;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 12px;
     border: none;
 }
+
+.stButton>button:hover {
+    transform: scale(1.02);
+    background: linear-gradient(135deg,#7C3AED,#4F46E5);
+}
+
+.section-box {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 12px rgba(0,0,0,0.05);
+    margin-bottom: 15px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
-# ==============================
+# ===============================
 # Header
-# ==============================
-st.markdown('<h1 class="main-header">🧞‍♂️ RoomGenie</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">AI-Powered Renovation Planning</p>', unsafe_allow_html=True)
+# ===============================
+st.markdown('<h1 class="main-title">🏠 SmartGhar AI</h1>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Smart Renovation Planning for Indian Homes</p>', unsafe_allow_html=True)
 
 st.markdown("---")
 
-# ==============================
-# User Input
-# ==============================
+# ===============================
+# Sidebar (Left Panel)
+# ===============================
+with st.sidebar:
+
+    st.markdown("## 🇮🇳 About SmartGhar AI")
+
+    st.markdown("""
+✅ Easy Renovation Plans  
+✅ Budget in Rupees  
+✅ Timeline  
+✅ Material List  
+✅ Contractor-Friendly  
+✅ AI Image Prompt  
+✅ Work Estimation  
+✅ Cost Saving Tips  
+
+**100% Free for India**
+    """)
+
+    st.markdown("---")
+
+    st.markdown("## 🛠️ For Whom?")
+
+    st.markdown("""
+✔ Home Owners  
+✔ Local Contractors  
+✔ Interior Workers  
+✔ Builders  
+✔ Small Businesses  
+    """)
+
+    st.markdown("---")
+
+    st.markdown("## 💡 How To Use")
+
+    st.markdown("""
+1️⃣ Write your requirement  
+2️⃣ Click Generate  
+3️⃣ Share plan with worker  
+4️⃣ Start work  
+    """)
+
+    st.markdown("---")
+
+    st.markdown("## 🚀 Extra Features")
+
+    st.markdown("""
+📄 Download Plan  
+📱 Mobile Friendly  
+🧮 Cost Calculator  
+🧱 Material Guide  
+🔧 Work Checklist  
+    """)
+
+    st.markdown("---")
+
+    st.markdown("### ❤️ Built By Kanav")
+
+# ===============================
+# Input Section
+# ===============================
+st.markdown("## ✍️ Describe Your Renovation")
+
+st.markdown("""
+Write in simple words. Example format:
+
+**Room Type + Budget + Needs**
+""")
+
 user_input = st.text_area(
-    "✨ Describe your renovation project:",
+    "",
     placeholder="""
 Example:
-Modern bedroom, ₹40,000 budget,
-white walls, wooden furniture,
-minimalist style, good lighting
-""",
-    height=130,
-    help="Include: Room type, Budget, Colors, Style, Materials"
+
+Kitchen renovation, ₹20,000 budget
+Need cabinets, gas stove, sink
+White color, easy cleaning
+Small size kitchen
+    """,
+    height=160,
+    key="input",
+    help="Write room type, budget, and needs clearly"
 )
 
-# ==============================
-# Example Prompts
-# ==============================
-with st.expander("📌 See Example Prompts"):
+# ===============================
+# Easy Examples
+# ===============================
+with st.expander("📌 Click to See Easy Examples"):
+
     st.code("""
-Modern kitchen, ₹50,000 budget,
-white cabinets, marble countertop,
-brass handles, pendant lights
-    """)
-    
-    st.code("""
-Living room, ₹45,000,
-warm colors, wooden sofa,
-plants, cozy lighting
+Bedroom, ₹30,000 budget
+Double bed, cupboard, lights
+Light blue walls
+Simple design
     """)
 
-# ==============================
+    st.code("""
+Bathroom, ₹25,000
+Tiles, wash basin, shower
+Anti-slip floor
+Good drainage
+    """)
+
+    st.code("""
+Living room, ₹40,000
+Sofa, TV unit, ceiling lights
+Warm colors
+Space for guests
+    """)
+
+    st.code("""
+Small kitchen, ₹20,000
+Gas stove, sink, shelves
+White tiles
+Low maintenance
+    """)
+
+
+# ===============================
 # Generate Button
-# ==============================
-if st.button("🚀 Generate Renovation Plan", type="primary"):
+# ===============================
+if st.button("🚀 Generate Smart Plan"):
 
     if not user_input.strip():
-        st.warning("⚠️ Please enter your renovation details.")
+        st.warning("⚠️ Please write your renovation details.")
         st.stop()
 
-    with st.spinner("🧞‍♂️ Creating your professional plan..."):
+    with st.spinner("🤖 SmartGhar AI is preparing your plan..."):
+
         try:
 
-            # ==============================
+            # ===============================
             # System Prompt
-            # ==============================
+            # ===============================
             system_prompt = """
-You are RoomGenie, a professional interior designer
-with 20 years of experience.
+You are SmartGhar AI.
 
-You create:
-- Practical renovation plans
-- Realistic budgets
-- Clear timelines
-- Useful shopping lists
-- Detailed AI image prompts
+You are an expert Indian home renovation consultant.
 
-Your advice is realistic and budget-friendly.
+Your job:
+- Use simple English
+- Easy for workers to understand
+- Clear costing in INR
+- Practical materials
+- Local market based advice
+- Step by step explanation
+
+Write in simple words.
+Avoid complex technical language.
 """
 
-            # ==============================
+            # ===============================
             # User Prompt
-            # ==============================
+            # ===============================
             user_prompt = f"""
-User Request:
+User Requirement:
 {user_input}
 
-Create a complete renovation plan with:
+Create a renovation plan with:
 
-# 1. Project Overview
-- Summary
+## 1. Project Overview (Very Simple)
+- Room Name
 - Budget
-- Timeline
+- Work Needed
+- Area Size (Approx)
+- Main Goal
 
-# 2. Design Vision
+## 2. Design & Look
 - Style
-- Color palette (with names)
-- Materials
-- Mood
+- Wall Colors
+- Floor Type
+- Lighting
+- Furniture
 
-# 3. Budget Breakdown
-Provide item-wise costing:
+## 3. Budget Details (In Rupees)
+Give realistic costing:
 - Paint
-- Flooring
-- Lighting
+- Tiles/Floor
 - Furniture
-- Decor
-- Labor
-- Contingency (10%)
-- TOTAL
+- Electrical
+- Plumbing
+- Labour
+- Material
+- Extra (10%)
 
-# 4. 4-Week Timeline
-Week-by-week tasks
+## 4. Work Timeline (4 Weeks)
+Week-wise work plan
 
-# 5. Shopping List
-- Must-Have
-- Nice-to-Have
-- Future Upgrades
+## 5. Material List
+Write clear shopping list
 
-# 6. Pro Tips
-- Saving money
-- Maintenance
-- Best practices
+## 6. Worker Instructions
+Simple steps for mason, electrician, plumber
 
-# 7. AI Image Prompt (TEXT ONLY)
-Write ONE detailed prompt for AI image generation.
-Include:
-- Camera angle
-- Colors
-- Furniture
-- Lighting
-- Textures
-- Atmosphere
-- Style keywords
+## 7. Money Saving Tips
+How to reduce cost
 
-Make it realistic and photorealistic.
+## 8. AI Image Prompt
+Write ONE detailed prompt for image generation
+
+Use very simple language.
+Make it suitable for Indian workers.
 """
 
-            # ==============================
-            # Call Groq API
-            # ==============================
+            # ===============================
+            # Call AI
+            # ===============================
             response = client.chat.completions.create(
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
                 ],
                 model="llama-3.3-70b-versatile",
-                temperature=0.7,
+                temperature=0.6,
                 max_tokens=3500
             )
 
             result = response.choices[0].message.content
 
-            # ==============================
+            # ===============================
             # Display Output
-            # ==============================
-            st.success("✅ Renovation Plan Ready!")
+            # ===============================
+            st.success("✅ Your Smart Renovation Plan is Ready!")
+
             st.markdown("---")
+
             st.markdown(result)
 
             st.markdown("---")
-            st.info("💡 Tip: Use the AI Image Prompt in tools like Midjourney, DALL·E, Leonardo, etc.")
+
+            st.info("📌 Tip: Share this plan with your contractor on WhatsApp.")
 
         except Exception as e:
             st.error(f"❌ Error: {str(e)}")
 
+# ===============================
+# Footer
+# ===============================
+st.markdown("---")
 
-# ==============================
-# Sidebar
-# ==============================
-with st.sidebar:
-
-    st.markdown("## 🧞‍♂️ About RoomGenie")
-
-    st.markdown("""
-RoomGenie helps you create:
-
-✅ Professional Renovation Plans  
-✅ Budget Breakdown  
-✅ Timeline  
-✅ Shopping List  
-✅ AI Image Prompt (Text)
-
-**100% Free**
-    """)
-
-    st.markdown("---")
-
-    st.markdown("## 💡 Best Tips")
-
-    st.markdown("""
-✔ Mention room type  
-✔ Give exact budget  
-✔ Tell color preference  
-✔ Mention style  
-✔ Add special needs
-    """)
-
-    st.markdown("---")
-
-    st.markdown("### 🚀 Built By Kanav")
+st.markdown("""
+<center>
+SmartGhar AI 🇮🇳 | Made for Indian Homes | Powered by AI  
+</center>
+""", unsafe_allow_html=True)
 
 
 # Footer
@@ -250,7 +337,7 @@ st.markdown("""
         <a href='https://github.com/KanavChauhan23/ai-home-renovation-agent' target='_blank'>Source Code</a>
     </p>
     <p style='font-size: 12px; margin-top: 10px;'>
-        🧞‍♂️ RoomGenie - Professional Renovation Planning with AI Visualization
+        🏠 SmartGhar AI - Renovation PlanneRoom
     </p>
 </div>
 """, unsafe_allow_html=True)
