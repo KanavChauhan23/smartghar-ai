@@ -439,7 +439,7 @@ Make this plan INSPIRING, PRACTICAL, and ACHIEVABLE. Use Indian context, brands,
 - Screenshot or bookmark this page
 - Share link with contractors
 - Print for reference during work
-- Open during renovation for quick guidance
+- Open renovation for quick guidance
                 """)
             
             with col2:
@@ -454,10 +454,8 @@ Make this plan INSPIRING, PRACTICAL, and ACHIEVABLE. Use Indian context, brands,
             with col3:
                 st.warning("""
 **⚠️ Important**
-- Always get professional help for electrical
-- Check material quality before buying
 - Keep 10-15% buffer for unexpected costs
-- Take before/after photos!
+- Take clear before and after photos to track progress and compare the transformation.
                 """)
             
         except Exception as e:
