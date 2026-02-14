@@ -1,9 +1,14 @@
 import streamlit as st
 from groq import Groq
-import urllib.parse
+import requests
+from PIL import Image
+from io import BytesIO
 
 # Initialize Groq client
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+
+# FAL API key (if available)
+FAL_KEY = st.secrets.get("FAL_API_KEY", None)
 
 # Page config
 st.set_page_config(
@@ -59,10 +64,47 @@ st.markdown("---")
 # Simple input
 user_input = st.text_area(
     "✨ Describe your dream renovation:",
-    placeholder="e.g., Modern kitchen, ₹50,000 budget, white cabinets, marble countertops, brass fixtures, pendant lights",
+    placeholder="e.g., Modern kitchen, ₹50,000 budget, white cabinets, marble countertops, brass fixtures",
     height=120,
     help="Include: room type, budget, colors, materials, style"
 )
+
+def generate_image_fal(prompt):
+    """Generate image using FAL.ai - very reliable and fast"""
+    try:
+        if not FAL_KEY:
+            return None
+        
+        import fal_client
+        
+        # Enhanced prompt for interior design
+        enhanced_prompt = f"professional interior design photography, {prompt}, high quality, well lit, modern, clean, architectural photography, 8k"
+        
+        result = fal_client.subscribe(
+            "fal-ai/flux/schnell",
+            arguments={
+                "prompt": enhanced_prompt[:512],
+                "image_size": "landscape_16_9",
+                "num_inference_steps": 4,
+                "num_images": 1
+            },
+            with_logs=False,
+            on_queue_update=lambda update: None,
+        )
+        
+        # Get image URL
+        if result and 'images' in result and len(result['images']) > 0:
+            image_url = result['images'][0]['url']
+            
+            # Download image
+            response = requests.get(image_url, timeout=30)
+            if response.status_code == 200:
+                return Image.open(BytesIO(response.content))
+        
+        return None
+        
+    except:
+        return None
 
 # Generate button
 if st.button("🚀 Generate My Dream Room", type="primary"):
@@ -92,26 +134,18 @@ Create a comprehensive renovation plan with:
 
 ## 1. Design Vision
 - Style and theme
-- **Color Palette** (specific colors with hex codes)
-- **Key Materials** (wood types, metals, fabrics)
-- Mood and atmosphere
+- **Color Palette** (specific colors)
+- **Key Materials**
+- Mood
 
 ## 2. Budget Breakdown
-Itemized costs totaling the budget
+Itemized costs
 
 ## 3. Timeline
-Week-by-week schedule (4 weeks)
+Week-by-week (4 weeks)
 
 ## 4. Visual Description
-Write ONE detailed paragraph (100-150 words) describing the finished room. Include:
-- Exact colors of walls, furniture, accents
-- All furniture pieces and materials
-- Lighting (natural and artificial)
-- Layout and spatial feel
-- Textures and finishes
-- Overall atmosphere
-
-Make it vivid and photorealistic!"""
+One detailed paragraph describing the finished room with specific colors, furniture, lighting, textures."""
 
             response = client.chat.completions.create(
                 messages=[
@@ -129,7 +163,7 @@ Make it vivid and photorealistic!"""
             st.success("✅ Renovation Plan Ready!")
             st.markdown(plan)
             
-            # Extract visual description for image
+            # Extract visual description
             visual_desc = ""
             if "visual description" in plan.lower():
                 lines = plan.split('\n')
@@ -154,106 +188,72 @@ Make it vivid and photorealistic!"""
             status_text.empty()
             st.stop()
     
-    # Generate and display image
+    # Generate image
     with image_col:
         status_text.text("🎨 Generating visualization...")
         progress_bar.progress(70)
         
-        try:
-            # Create enhanced prompt for image
-            image_prompt = f"professional interior design photography, {visual_desc.strip()}, high quality, well lit, modern, clean, architectural photography, magazine quality"
+        if FAL_KEY:
+            st.info("⏳ Generating high-quality image with FAL.ai (15-30 seconds)...")
             
-            # Encode for URL
-            encoded_prompt = urllib.parse.quote(image_prompt[:500])
-            
-            # Generate Pollinations URL
-            image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=768&nologo=true&model=flux&enhance=true"
+            generated_image = generate_image_fal(visual_desc.strip())
             
             progress_bar.progress(100)
             status_text.empty()
             
-            st.success("✅ Visualization Generated!")
-            
-            # Display image directly from URL
-            st.image(image_url, caption="Your Dream Room (AI-Generated)", use_container_width=True)
-            
-            # Provide direct link as backup
-            st.markdown(f"[🔗 Open full image in new tab]({image_url})")
-            
-            # Info about downloading
-            st.caption("💡 Right-click the image above and select 'Save image as...' to download")
-            
-        except Exception as e:
-            st.error(f"Image error: {str(e)}")
-            st.info("Your renovation plan is ready above!")
+            if generated_image:
+                st.success("✅ Visualization Generated!")
+                st.image(generated_image, caption="Your Dream Room", use_container_width=True)
+                
+                # Download
+                buf = BytesIO()
+                generated_image.save(buf, format="PNG")
+                st.download_button(
+                    label="📥 Download Image",
+                    data=buf.getvalue(),
+                    file_name="roomgenie.png",
+                    mime="image/png",
+                    use_container_width=True
+                )
+            else:
+                st.warning("⚠️ Image generation issue. Your plan is ready!")
+        else:
+            st.info("💡 Add FAL_API_KEY to Secrets for image generation")
+            st.markdown("Get free API key at: https://fal.ai/")
     
     progress_bar.empty()
-    
-    st.markdown("---")
-    st.info("💡 **Tip**: Screenshot or bookmark this page to save your plan and visualization!")
 
 # Sidebar
 with st.sidebar:
-    st.markdown("### 🧞‍♂️ About RoomGenie")
+    st.markdown("### 🧞‍♂️ RoomGenie")
     st.markdown("""
-    AI-powered renovation planning with instant visualizations!
-    
-    **Features:**
-    - 📋 Detailed design plans
-    - 💰 Budget breakdowns
-    - 📅 Timelines
-    - 🎨 AI-generated images
+    AI renovation planning + visualization
     
     **100% FREE**
     """)
     
     st.markdown("---")
     
-    st.markdown("### 💡 Tips")
-    st.markdown("""
-    **Include in your description:**
-    - Room type
-    - Budget (₹)
-    - Colors you want
-    - Materials (wood, marble, etc.)
-    - Style (modern, rustic, etc.)
+    st.markdown("### ⚙️ Setup")
     
-    **More details = better results!**
-    """)
-    
-    st.markdown("---")
-    
-    st.markdown("### 📝 Example")
-    
-    st.code("""
-"Modern bedroom, ₹35,000 budget.
-Soft white walls, warm oak bed
-frame, minimalist design, sage
-green accents, natural lighting,
-cozy textiles"
-    """, language=None)
-    
-    st.markdown("---")
-    
-    st.markdown("### ⚙️ Technology")
-    st.markdown("""
-    **Planning AI**: Groq (Llama 3.3)  
-    **Images**: Pollinations AI  
-    
-    🟢 **Status**: Active
-    """)
+    if FAL_KEY:
+        st.success("✅ FAL.ai connected")
+    else:
+        st.warning("⚠️ No FAL API key")
+        st.info("""
+**To enable images:**
+1. Go to fal.ai
+2. Sign up (FREE)
+3. Get API key
+4. Add to Streamlit Secrets:
+   `FAL_API_KEY = "key-xxx"`
+        """)
 
 # Footer
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #666;'>
-    <p><strong>✨ Built with ❤️ by Kanav Chauhan ✨</strong></p>
-    <p>
-        <a href='https://github.com/KanavChauhan23' target='_blank'>GitHub</a> | 
-        <a href='https://github.com/KanavChauhan23/ai-home-renovation-agent' target='_blank'>Source</a>
-    </p>
-    <p style='font-size: 12px; margin-top: 10px;'>
-        🧞‍♂️ RoomGenie - AI Renovation Planning & Visualization
-    </p>
+    <p><strong>Built by Kanav Chauhan</strong></p>
+    <p><a href='https://github.com/KanavChauhan23' target='_blank'>GitHub</a></p>
 </div>
 """, unsafe_allow_html=True)
