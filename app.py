@@ -439,6 +439,7 @@ Make this plan INSPIRING, PRACTICAL, and ACHIEVABLE. Use Indian context, brands,
 - Screenshot or bookmark this page
 - Share link with contractors
 - Print for reference during work
+- Open anytime during renovation for quick guidance
                 """)
             
             with col2:
