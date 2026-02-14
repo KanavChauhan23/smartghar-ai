@@ -1,156 +1,183 @@
 import streamlit as st
 from groq import Groq
-import requests
-from PIL import Image
-from io import BytesIO
-import urllib.parse
 
-# Initialize Groq client
+# ==============================
+# Initialize Groq Client
+# ==============================
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
-# Page config
+# ==============================
+# Page Config
+# ==============================
 st.set_page_config(
-    page_title="RoomGenie - AI Renovation Planner", 
-    layout="wide", 
+    page_title="RoomGenie - AI Renovation Planner",
+    layout="wide",
     page_icon="🧞‍♂️"
 )
 
+# ==============================
 # Custom CSS
+# ==============================
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 3.5rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-align: center;
-        margin-bottom: 0.5rem;
-    }
-    .sub-header {
-        text-align: center;
-        color: #666;
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-    }
-    .tagline {
-        text-align: center;
-        color: #888;
-        font-style: italic;
-        margin-bottom: 2rem;
-    }
-    .stButton>button {
-        width: 100%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        font-size: 1.2rem;
-        font-weight: 600;
-        padding: 0.8rem;
-        border: none;
-        border-radius: 12px;
-        transition: all 0.3s;
-    }
-    .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    }
+.main-header {
+    font-size: 3.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+.sub-header {
+    text-align: center;
+    color: #666;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.stButton>button {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.8rem;
+    border-radius: 10px;
+    border: none;
+}
 </style>
 """, unsafe_allow_html=True)
 
+# ==============================
 # Header
+# ==============================
 st.markdown('<h1 class="main-header">🧞‍♂️ RoomGenie</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">AI-Powered Renovation Planning & Visualization</p>', unsafe_allow_html=True)
-st.markdown('<p class="tagline">"Professional renovation plans with AI-generated visuals"</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">AI-Powered Renovation Planning</p>', unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Simple input
+# ==============================
+# User Input
+# ==============================
 user_input = st.text_area(
-    "✨ Describe your dream renovation:",
-    placeholder="e.g., Modern bedroom with ₹30,000 budget. Minimalist white walls, light oak furniture, soft gray textiles, lots of natural light.",
-    height=120,
-    help="Be specific! Include: room type, budget, colors, materials, style"
+    "✨ Describe your renovation project:",
+    placeholder="""
+Example:
+Modern bedroom, ₹40,000 budget,
+white walls, wooden furniture,
+minimalist style, good lighting
+""",
+    height=130,
+    help="Include: Room type, Budget, Colors, Style, Materials"
 )
 
-def generate_image_pollinations(prompt):
-    """Generate image using Pollinations.ai - free, no auth needed"""
-    try:
-        # Clean and enhance prompt for interior design
-        clean_prompt = prompt.replace('\n', ' ').strip()
-        enhanced_prompt = f"professional interior design photograph, {clean_prompt}, high quality, well lit, modern, clean, architectural photography, 8k"
-        
-        # Pollinations API - completely free
-        encoded_prompt = urllib.parse.quote(enhanced_prompt[:800])
-        url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=768&nologo=true&enhance=true"
-        
-        response = requests.get(url, timeout=90)
-        
-        if response.status_code == 200:
-            return Image.open(BytesIO(response.content))
-        else:
-            return None
-            
-    except Exception as e:
-        st.error(f"Image generation error: {str(e)}")
-        return None
-
-# Generate button
-if st.button("🚀 Generate My Dream Room", type="primary"):
+# ==============================
+# Example Prompts
+# ==============================
+with st.expander("📌 See Example Prompts"):
+    st.code("""
+Modern kitchen, ₹50,000 budget,
+white cabinets, marble countertop,
+brass handles, pendant lights
+    """)
     
-    if not user_input or not user_input.strip():
-        st.warning("⚠️ Please describe your dream renovation!")
+    st.code("""
+Living room, ₹45,000,
+warm colors, wooden sofa,
+plants, cozy lighting
+    """)
+
+# ==============================
+# Generate Button
+# ==============================
+if st.button("🚀 Generate Renovation Plan", type="primary"):
+
+    if not user_input.strip():
+        st.warning("⚠️ Please enter your renovation details.")
         st.stop()
-    
-    # Progress indicator
-    progress_bar = st.progress(0)
-    status_text = st.empty()
-    
-    # Two column layout
-    plan_col, image_col = st.columns([1.2, 1])
-    
-    # STEP 1: Generate renovation plan
-    with plan_col:
-        status_text.text("🧞‍♂️ Creating your renovation plan...")
-        progress_bar.progress(20)
-        
+
+    with st.spinner("🧞‍♂️ Creating your professional plan..."):
         try:
-            system_prompt = """You are RoomGenie, an expert AI interior designer. Create detailed, practical renovation plans.
 
-For each request:
-1. Extract budget and room type
-2. Create cohesive design vision
-3. Provide realistic budget breakdown
-4. Include timeline
-5. End with detailed visual description"""
+            # ==============================
+            # System Prompt
+            # ==============================
+            system_prompt = """
+You are RoomGenie, a professional interior designer
+with 20 years of experience.
 
-            user_prompt = f"""{user_input}
+You create:
+- Practical renovation plans
+- Realistic budgets
+- Clear timelines
+- Useful shopping lists
+- Detailed AI image prompts
 
-Create a comprehensive renovation plan with:
+Your advice is realistic and budget-friendly.
+"""
 
-## 1. Design Vision
-- Style and theme
-- **Color Palette** (specific color names and hex codes if possible)
-- **Key Materials** (wood types, metal finishes, fabrics)
-- Mood and atmosphere
+            # ==============================
+            # User Prompt
+            # ==============================
+            user_prompt = f"""
+User Request:
+{user_input}
 
-## 2. Budget Breakdown
-Itemized costs that total the budget mentioned
+Create a complete renovation plan with:
 
-## 3. Timeline
-Week-by-week schedule
+# 1. Project Overview
+- Summary
+- Budget
+- Timeline
 
-## 4. Detailed Visual Description
-Describe the finished room in vivid detail for AI visualization. Include:
-- Exact colors used (walls, furniture, accents)
-- All furniture pieces and their materials/finishes
-- Lighting (natural and artificial)
-- Textures (wood grain, fabric, metal)
-- Layout and spatial arrangement
-- Decorative elements
-- Overall atmosphere
+# 2. Design Vision
+- Style
+- Color palette (with names)
+- Materials
+- Mood
 
-Make it photorealistic and specific!"""
+# 3. Budget Breakdown
+Provide item-wise costing:
+- Paint
+- Flooring
+- Lighting
+- Furniture
+- Decor
+- Labor
+- Contingency (10%)
+- TOTAL
 
+# 4. 4-Week Timeline
+Week-by-week tasks
+
+# 5. Shopping List
+- Must-Have
+- Nice-to-Have
+- Future Upgrades
+
+# 6. Pro Tips
+- Saving money
+- Maintenance
+- Best practices
+
+# 7. AI Image Prompt (TEXT ONLY)
+Write ONE detailed prompt for AI image generation.
+Include:
+- Camera angle
+- Colors
+- Furniture
+- Lighting
+- Textures
+- Atmosphere
+- Style keywords
+
+Make it realistic and photorealistic.
+"""
+
+            # ==============================
+            # Call Groq API
+            # ==============================
             response = client.chat.completions.create(
                 messages=[
                     {"role": "system", "content": system_prompt},
@@ -158,164 +185,60 @@ Make it photorealistic and specific!"""
                 ],
                 model="llama-3.3-70b-versatile",
                 temperature=0.7,
-                max_tokens=2500
+                max_tokens=3500
             )
-            
-            plan = response.choices[0].message.content
-            progress_bar.progress(50)
-            
-            # Display plan
+
+            result = response.choices[0].message.content
+
+            # ==============================
+            # Display Output
+            # ==============================
             st.success("✅ Renovation Plan Ready!")
-            st.markdown(plan)
-            
+            st.markdown("---")
+            st.markdown(result)
+
+            st.markdown("---")
+            st.info("💡 Tip: Use the AI Image Prompt in tools like Midjourney, DALL·E, Leonardo, etc.")
+
         except Exception as e:
             st.error(f"❌ Error: {str(e)}")
-            progress_bar.empty()
-            status_text.empty()
-            st.stop()
-    
-    # STEP 2: Generate visualization
-    with image_col:
-        status_text.text("🎨 Generating AI visualization (30-60 seconds)...")
-        progress_bar.progress(60)
-        
-        try:
-            # Extract visual description from plan
-            visual_prompt = ""
-            
-            if "visual description" in plan.lower() or "detailed visual" in plan.lower():
-                lines = plan.split('\n')
-                capture = False
-                
-                for line in lines:
-                    if "visual description" in line.lower() or "detailed visual" in line.lower():
-                        capture = True
-                        continue
-                    
-                    if capture:
-                        # Stop at next section header
-                        if line.strip().startswith('#') and len(visual_prompt) > 50:
-                            break
-                        
-                        if line.strip() and not line.strip().startswith('**'):
-                            visual_prompt += line.strip() + " "
-                        
-                        if len(visual_prompt) > 400:
-                            break
-            
-            # Fallback if no description found
-            if len(visual_prompt) < 50:
-                visual_prompt = user_input[:300]
-            
-            progress_bar.progress(70)
-            
-            # Generate image
-            st.info("⏳ Generating image... This may take up to 60 seconds. Please wait...")
-            generated_image = generate_image_pollinations(visual_prompt.strip())
-            
-            progress_bar.progress(100)
-            status_text.empty()
-            
-            if generated_image:
-                st.success("✅ Visualization Generated!")
-                st.image(
-                    generated_image, 
-                    caption="AI-Generated Visualization of Your Dream Room",
-                    use_container_width=True
-                )
-                
-                # Download button
-                buf = BytesIO()
-                generated_image.save(buf, format="PNG")
-                
-                st.download_button(
-                    label="📥 Download High-Quality Image",
-                    data=buf.getvalue(),
-                    file_name="roomgenie_visualization.png",
-                    mime="image/png",
-                    use_container_width=True
-                )
-            else:
-                st.warning("⚠️ Image generation didn't complete. Please try again.")
-                
-        except Exception as e:
-            st.warning(f"Image generation issue: {str(e)}")
-            st.info("Your renovation plan is ready in the left column!")
-    
-    progress_bar.empty()
-    
-    st.markdown("---")
-    st.info("💡 **Next Steps**: Save this plan and visualization! Share with contractors for quotes.")
 
+
+# ==============================
 # Sidebar
+# ==============================
 with st.sidebar:
-    st.markdown("### 🧞‍♂️ About RoomGenie")
+
+    st.markdown("## 🧞‍♂️ About RoomGenie")
+
     st.markdown("""
-    Get professional renovation plans with AI-generated visualizations!
-    
-    **Features:**
-    - 📋 Detailed design plans
-    - 💰 Budget breakdowns
-    - 📅 Week-by-week timelines
-    - 🎨 AI-generated room images
-    
-    **100% FREE • Unlimited Use**
+RoomGenie helps you create:
+
+✅ Professional Renovation Plans  
+✅ Budget Breakdown  
+✅ Timeline  
+✅ Shopping List  
+✅ AI Image Prompt (Text)
+
+**100% Free**
     """)
-    
+
     st.markdown("---")
-    
-    st.markdown("### 💡 Tips for Best Results")
+
+    st.markdown("## 💡 Best Tips")
+
     st.markdown("""
-    **Be specific with:**
-    - Room type & size
-    - Budget amount
-    - Color preferences
-    - Material choices
-    - Style (modern, rustic, etc.)
-    
-    The more details = better plan & image!
+✔ Mention room type  
+✔ Give exact budget  
+✔ Tell color preference  
+✔ Mention style  
+✔ Add special needs
     """)
-    
+
     st.markdown("---")
-    
-    st.markdown("### 📝 Example Prompts")
-    
-    with st.expander("Bedroom Example"):
-        st.code("""
-Modern master bedroom, ₹40,000 budget.
-Soft white walls, warm oak furniture,
-sage green accents, minimalist design,
-lots of natural light, cozy textiles.
-        """, language=None)
-    
-    with st.expander("Kitchen Example"):
-        st.code("""
-Contemporary kitchen, ₹60,000 budget.
-White subway tiles, marble countertops,
-brass fixtures, pendant lights,
-light wood cabinets, open shelving.
-        """, language=None)
-    
-    with st.expander("Living Room Example"):
-        st.code("""
-Cozy living room, ₹35,000 budget.
-Earthy tones, comfortable sectional,
-indoor plants, warm lighting,
-wooden coffee table, textured rugs.
-        """, language=None)
-    
-    st.markdown("---")
-    
-    st.markdown("### ⚙️ Technology")
-    st.markdown("""
-    **Planning AI**  
-    Groq (Llama 3.3 70B)
-    
-    **Image Generation**  
-    Pollinations.ai
-    
-    🟢 **Status**: Active
-    """)
+
+    st.markdown("### 🚀 Built By Kanav")
+
 
 # Footer
 st.markdown("---")
