@@ -286,7 +286,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - GitHub: [@KanavChauhan23](https://github.com/KanavChauhan23)
 - LinkedIn: [Kanav Chauhan](https://linkedin.com/in/kanavchauhan23)
-- Portfolio: [Your Portfolio URL](https://kanav-public.netlify.app/)
+- Portfolio: [Portfolio](https://kanav-public.netlify.app/)
 
 ---
 
