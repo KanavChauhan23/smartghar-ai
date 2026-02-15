@@ -543,18 +543,55 @@ wooden coffee table, jute rug"
 
 # Footer
 st.markdown("---")
+
 st.markdown("""
+<style>
+.linkedin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0077b5;
+    color: white !important;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: 0.3s;
+}
+
+.linkedin-btn:hover {
+    background: #005582;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,119,181,0.4);
+}
+
+.linkedin-icon {
+    font-size: 18px;
+}
+</style>
+
 <div style='text-align: center; color: #666;'>
-    <p style='font-size: 1.2rem; font-weight: 600;'>✨ Built with ❤️ by Kanav Chauhan ✨</p>
-    <p>
-        <a href='https://github.com/KanavChauhan23' target='_blank' style='margin: 0 10px;'>GitHub</a> |
-        <a href='https://linkedin.com/in/kanavchauhan23' target='_blank' style='margin: 0 10px;'>LinkedIn</a>
+
+    <p style='font-size: 1.2rem; font-weight: 600;'>
+        ✨ Built with ❤️ by Kanav Chauhan ✨
     </p>
+
+    <a href='https://linkedin.com/in/kanavchauhan23'
+       target='_blank'
+       class='linkedin-btn'>
+
+        <span class='linkedin-icon'>🔗</span> LinkedIn
+
+    </a>
+
     <p style='font-size: 0.9rem; margin-top: 1rem; color: #888;'>
         🏡 SmartGhar AI - Making Indian Homes Beautiful, One Room at a Time
     </p>
+
     <p style='font-size: 0.8rem; color: #aaa;'>
         आपके सपनों का घर, AI की मदद से | Your Dream Home, Powered by AI
     </p>
+
 </div>
 """, unsafe_allow_html=True)
+
