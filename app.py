@@ -570,25 +570,25 @@ st.markdown("""
 }
 </style>
 
-<div style='text-align: center; color: #666;'>
+<div style="text-align: center; color: #666;">
 
-    <p style='font-size: 1.2rem; font-weight: 600;'>
+    <p style="font-size:1.2rem; font-weight:600;">
         ✨ Built with ❤️ by Kanav Chauhan ✨
     </p>
 
-    <a href='https://linkedin.com/in/kanavchauhan23'
-       target='_blank'
-       class='linkedin-btn'>
+    <a href="https://linkedin.com/in/kanavchauhan23"
+       target="_blank"
+       class="linkedin-btn">
 
-        <span class='linkedin-icon'>🔗</span> LinkedIn
+        <span class="linkedin-icon">🔗</span> LinkedIn
 
     </a>
 
-    <p style='font-size: 0.9rem; margin-top: 1rem; color: #888;'>
+    <p style="font-size:0.9rem; margin-top:1rem; color:#888;">
         🏡 SmartGhar AI - Making Indian Homes Beautiful, One Room at a Time
     </p>
 
-    <p style='font-size: 0.8rem; color: #aaa;'>
+    <p style="font-size:0.8rem; color:#aaa;">
         आपके सपनों का घर, AI की मदद से | Your Dream Home, Powered by AI
     </p>
 
