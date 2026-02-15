@@ -439,7 +439,6 @@ Make this plan INSPIRING, PRACTICAL, and ACHIEVABLE. Use Indian context, brands,
 - Screenshot or bookmark this page
 - Share link with contractors
 - Print for reference during work
-- Open renovation for quick guidance
                 """)
             
             with col2:
@@ -454,8 +453,10 @@ Make this plan INSPIRING, PRACTICAL, and ACHIEVABLE. Use Indian context, brands,
             with col3:
                 st.warning("""
 **⚠️ Important**
+- Always get professional help for electrical
+- Check material quality before buying
 - Keep 10-15% buffer for unexpected costs
-- Take clear before and after photos to track progress.
+- Take before/after photos!
                 """)
             
         except Exception as e:
@@ -543,55 +544,44 @@ wooden coffee table, jute rug"
 
 # Footer
 st.markdown("---")
-
 st.markdown("""
-<style>
-.linkedin-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #0077b5;
-    color: white !important;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none !important;
-    transition: 0.3s;
-}
-
-.linkedin-btn:hover {
-    background: #005582;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,119,181,0.4);
-}
-
-.linkedin-icon {
-    font-size: 18px;
-}
-</style>
-
-<div style="text-align: center; color: #666;">
-
-    <p style="font-size:1.2rem; font-weight:600;">
-        ✨ Built with ❤️ by Kanav Chauhan ✨
-    </p>
-
-    <a href="https://linkedin.com/in/kanavchauhan23"
-       target="_blank"
-       class="linkedin-btn">
-
-        <span class="linkedin-icon">🔗</span> LinkedIn
-
+<div style='text-align: center; color: #666;'>
+    <p style='font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem;'>✨ Built with ❤️ by Kanav Chauhan ✨</p>
+    
+    <a href='https://linkedin.com/in/kanavchauhan23' target='_blank' style='text-decoration: none;'>
+        <button style='
+            background: linear-gradient(135deg, #0077B5 0%, #005582 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 119, 181, 0.3);
+        ' onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0, 119, 181, 0.4)';" 
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0, 119, 181, 0.3)';">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            Connect on LinkedIn
+        </button>
     </a>
-
-    <p style="font-size:0.9rem; margin-top:1rem; color:#888;">
+    
+    <p style='font-size: 0.85rem; margin-top: 1.5rem; color: #999;'>
+        <a href='https://github.com/KanavChauhan23/smartghar-ai' target='_blank' style='color: #667eea; text-decoration: none; margin: 0 8px;'>📂 View Source Code</a> •
+        <a href='https://github.com/KanavChauhan23' target='_blank' style='color: #667eea; text-decoration: none; margin: 0 8px;'>💻 GitHub Profile</a>
+    </p>
+    
+    <p style='font-size: 0.9rem; margin-top: 1.5rem; color: #888;'>
         🏡 SmartGhar AI - Making Indian Homes Beautiful, One Room at a Time
     </p>
-
-    <p style="font-size:0.8rem; color:#aaa;">
+    <p style='font-size: 0.8rem; color: #aaa; margin-top: 0.5rem;'>
         आपके सपनों का घर, AI की मदद से | Your Dream Home, Powered by AI
     </p>
-
 </div>
 """, unsafe_allow_html=True)
-
