@@ -439,6 +439,7 @@ Make this plan INSPIRING, PRACTICAL, and ACHIEVABLE. Use Indian context, brands,
 - Screenshot or bookmark this page
 - Share link with contractors
 - Print for reference during work
+- Open renovation for quick guidance
                 """)
             
             with col2:
@@ -453,10 +454,8 @@ Make this plan INSPIRING, PRACTICAL, and ACHIEVABLE. Use Indian context, brands,
             with col3:
                 st.warning("""
 **⚠️ Important**
-- Always get professional help for electrical
-- Check material quality before buying
 - Keep 10-15% buffer for unexpected costs
-- Take before/after photos!
+- Take clear before and after photos to track progress.
                 """)
             
         except Exception as e:
@@ -544,27 +543,17 @@ wooden coffee table, jute rug"
 
 # Footer
 st.markdown("---")
-
-# LinkedIn button using Streamlit's native button
-col1, col2, col3 = st.columns([1, 1, 1])
-with col2:
-    st.link_button(
-        "🔗 Connect on LinkedIn",
-        "https://linkedin.com/in/kanavchauhan23",
-        use_container_width=True,
-        type="primary"
-    )
-
-# Rest of footer
 st.markdown("""
-<div style='text-align: center; color: #666; margin-top: 1rem;'>
-    <p style='font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;'>✨ Built with ❤️ by Kanav Chauhan ✨</p>
-    
-    <p style='font-size: 0.9rem; margin-top: 1.5rem; color: #888;'>
+<div style='text-align: center; color: #666;'>
+    <p style='font-size: 1.2rem; font-weight: 600;'>✨ Built with ❤️ by Kanav Chauhan ✨</p>
+    <p>
+        <a href='https://linkedin.com/in/kanavchauhan23' target='_blank' style='margin: 0 10px;'>LinkedIn</a>
+    </p>
+    <p style='font-size: 0.9rem; margin-top: 1rem; color: #888;'>
         🏡 SmartGhar AI - Making Indian Homes Beautiful, One Room at a Time
     </p>
-    <p style='font-size: 0.8rem; color: #aaa; margin-top: 0.5rem;'>
+    <p style='font-size: 0.8rem; color: #aaa;'>
         आपके सपनों का घर, AI की मदद से | Your Dream Home, Powered by AI
     </p>
 </div>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=True)"
